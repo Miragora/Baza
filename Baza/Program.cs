@@ -39,7 +39,7 @@ namespace Baza
 
 
             //  foreach (var stud in students)
-            //    stud.Visualise();
+            //   stud.Visualise();
             double min = double.PositiveInfinity;
             double max = double.NegativeInfinity;
             for (int i = 0; i< students.Length; i++)
@@ -63,7 +63,18 @@ namespace Baza
                 else if (average_rating < min_treshold)
                     last.Add(stud);
             }
+            /*
+         Console.WriteLine("Best:");
+         for (int i = 0; i < best.Count; i++)
+             Console.WriteLine(students[i]);
+         Console.WriteLine("Last:");
+         for (int i = 0; i < last.Count; i++)
+             Console.WriteLine(students[i]);
+            */
 
+            var dec_koef = max_treshold/ min_treshold ;
+
+            Console.WriteLine(dec_koef);
 
             Console.ReadLine();
 
