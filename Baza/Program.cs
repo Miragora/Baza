@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq; //упроститель жизни =)
 using System.Text;
+using System.Threading.Tasks;
+using System.IO;
+
+
 
 namespace Baza
 {
@@ -26,7 +29,7 @@ namespace Baza
                     first_names.Add(values[1]);
                     last_names.Add(values[0]);
                     patronimycs.Add(values[2]);
-
+                   
                     //Console.WriteLine(str);
                 }
 
@@ -36,10 +39,10 @@ namespace Baza
 
 
             //  foreach (var stud in students)
-            //    stud.Visualise();
+            //   stud.Visualise();
             double min = double.PositiveInfinity;
             double max = double.NegativeInfinity;
-            for (int i = 0; i < students.Length; i++)
+            for (int i = 0; i< students.Length; i++)
             {
                 var avg = students[i].AverageRating;
                 if (avg < min) min = avg;
@@ -47,8 +50,8 @@ namespace Baza
             }
 
             var delta = max - min;
-            var max_treshold = max - delta * 0.2;
-            var min_treshold = min + delta * 0.2;
+            var max_treshold = max - delta * 0.1;
+            var min_treshold = min + delta * 0.1;
 
             var best = new List<Student>();
             var last = new List<Student>();
@@ -61,30 +64,19 @@ namespace Baza
                     last.Add(stud);
             }
             /*
-            Console.WriteLine("Best:");
-            foreach (var stud in best)
-                stud.Visualise();
-            Console.WriteLine("Last:");
-            foreach (var stud in last)
-                stud.Visualise();
+         Console.WriteLine("Best:");
+         for (int i = 0; i < best.Count; i++)
+             Console.WriteLine(students[i]);
+         Console.WriteLine("Last:");
+         for (int i = 0; i < last.Count; i++)
+             Console.WriteLine(students[i]);
             */
 
-            /*
-            foreach (var stud in best)
-                var bestStud = CreateStudent(,  );
-                */
+            var dec_koef = max_treshold/ min_treshold ;
 
-            //Student.WriteToCSV("best.csv", students);
+            Console.WriteLine(dec_koef);
 
-            //Запись файла (создание)
-            Student.WriteToCSV("best.csv", best.ToArray()); 
-            Student.WriteToCSV("last.csv", last.ToArray());
-
-            //Чтение файла
-            Student.ReadCSV("best.csv");
-
-            //Console.ReadLine();
-
+            Console.ReadLine();
 
         }
 
@@ -104,7 +96,7 @@ namespace Baza
                 student.FirstNames = first_name;
                 student.LastNames = last_name;
                 student.Patronimyc = patronimics;
-                student.Ratings = GetRandomRatings(end, 10, 2, 3, 4, 5);
+                student.Ratings = GetRandomRatings(end,10, 2, 3, 4, 5);
                 result[i] = student;
 
             }
@@ -124,10 +116,10 @@ namespace Baza
         static int[] GetRandomRatings(Random rnd, int count, params int[] Variants)
         {
 
-            var result = new int[count];
-            for (int i = 0; i < count; i++)
-                result[i] = GetRandom(rnd, Variants);
-            return result;
+        var result = new int[count];
+        for (int i=0; i<count; i++)
+            result[i]=GetRandom(rnd, Variants);
+        return result;
         }
 
     }
@@ -138,27 +130,10 @@ namespace Baza
         public string LastNames;
         public string Patronimyc;
         public int[] Ratings;
-
-
-        public Student()
-        {
-            this.LastNames = " ";
-            this.FirstNames = " ";
-            this.Patronimyc = " ";
-        }
-
-
-        public Student(string FirstNames, string LastNames, string Patronimyc)
-        {
-            this.LastNames = LastNames;
-            this.FirstNames = FirstNames;
-            this.Patronimyc = Patronimyc;
-
-        }
         public void Visualise()
         {
             Console.Write("{0}, {1}, {2}", LastNames, FirstNames, Patronimyc);
-            if (Ratings != null)
+            if (Ratings!=null)
             {
                 for (int i = 0; i < Ratings.Length; i++)
                     Console.Write("{0},", Ratings[i]);
@@ -186,55 +161,7 @@ namespace Baza
             }
         }
 
-        public static void WriteToCSV(string FileName, Student[] Students)
-        {
-            using (var file = new StreamWriter(FileName, false, Encoding.UTF8))
-            {
-                file.WriteLine("LastName;FirstName;Patronymic;Ratings");
-
-                for (var i = 0; i < Students.Length; i++)
-                {
-                    var ratings = string.Join(";", Students[i].Ratings);
-
-                    file.WriteLine("{0};{1};{2};{3}", 
-                        Students[i].LastNames, Students[i].FirstNames, Students[i].Patronimyc, 
-                        ratings);
-                }
-            }
-        }
-
-        public static Student[] ReadCSV(string FileName)
-        {
-            var result = new List<Student>(1000);
-
-            using (var file = new StreamReader(FileName))
-            {
-                file.ReadLine();
-                while (!file.EndOfStream)
-                {
-                    var line = file.ReadLine();
-                    var values = line.Split(';');
-                    var student = new Student(values[0], values[1], values[2]);
-
-                    var ratings = new int[values.Length - 3];
-                    for (var i = 0; i < ratings.Length; i++)
-                        ratings[i] = int.Parse(values[i + 3]);
-
-                    student.Ratings = ratings;
-                    result.Add(student);
-
-                }
-
-            }
-
-            return result.ToArray();
-        }
     }
 
+
 }
-
-
-
-
-
-
